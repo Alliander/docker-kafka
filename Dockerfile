@@ -9,7 +9,7 @@ ENV KAFKA_UID=1234
 ENV KAFKA_GID=1234
 
 RUN apk upgrade --update && \
-	apk add --update unzip wget curl jq && \
+	apk add --update unzip wget curl jq bash && \
 	MIRROR=$(curl --stderr /dev/null https://www.apache.org/dyn/closer.cgi\?as_json\=1 | jq -r '.preferred') && \
 	URL="${MIRROR}kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" && \
 	wget -q ${URL} -O /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz && \
@@ -24,7 +24,7 @@ RUN apk upgrade --update && \
 	rm -rf /tmp/* /var/tmp/* /var/cache/apk/* && \
 	addgroup -g ${KAFKA_GID} kafka && \
 	adduser -D -G kafka -s /bin/bash -u ${KAFKA_UID} kafka && \
-	chown -R kafka:kafka /opt/kafka
+	chown -R kafka:kafka /opt
 
 ENV KAFKA_HOME /opt/kafka
 ENV PATH ${PATH}:${KAFKA_HOME}/bin
@@ -34,5 +34,7 @@ USER kafka
 WORKDIR /opt/kafka
 
 ADD config/server.properties config/
+ADD config/kafka-0-8-2.yml /opt/prometheus/config/
 
-ENTRYPOINT ["/opt/kafka/bin/kafka-server-start.sh"]
+ENV KAFKA_OPTS="$KAFKA_OPTS -javaagent:/opt/prometheus/jmx_prometheus_javaagent-${PROMETHEUS_JAVAAGENT_VERSION}.jar=7071:/opt/prometheus/config/kafka-0-8-2.yml
+
