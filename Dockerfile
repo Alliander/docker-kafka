@@ -1,4 +1,4 @@
-FROM openjdk:8u141-jdk-alpine
+FROM openjdk:8u131-jdk-alpine
 
 MAINTAINER Alliander - Sander Schoot Uiterkamp
 
