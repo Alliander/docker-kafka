@@ -36,5 +36,5 @@ WORKDIR /opt/kafka
 ADD config/server.properties config/
 ADD config/kafka-0-8-2.yml /opt/prometheus/config/
 
-ENV KAFKA_OPTS="$KAFKA_OPTS -javaagent:/opt/prometheus/jmx_prometheus_javaagent-${PROMETHEUS_JAVAAGENT_VERSION}.jar=7071:/opt/prometheus/config/kafka-0-8-2.yml
+ENV KAFKA_OPTS="$KAFKA_OPTS -javaagent:/opt/prometheus/jmx_prometheus_javaagent-${PROMETHEUS_JAVAAGENT_VERSION}.jar=7071:/opt/prometheus/config/kafka-0-8-2.yml"
 
